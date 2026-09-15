@@ -4,15 +4,15 @@
   "phase_index": 12,
   "total_phases": 12,
   "percent": 100,
-  "status": "in_progress",
-  "last_update": "2026-09-15T21:25:00Z",
+  "status": "done",
+  "last_update": "2026-09-15T21:35:00Z",
   "log": [
-    "2026-09-15T21:08:00Z All 5 pods 1/1 Running in matching namespace, phase 10 k8s_manifests DONE",
-    "2026-09-15T21:14:00Z terraform/main.tf: kubernetes provider (context kind-platform), resources scoped to matching namespace only (configmap, secret, 2 deployments, 2 services matching k8s/ manifests)",
-    "2026-09-15T21:16:00Z terraform import of the 6 existing kubectl-applied resources into state (avoids recreate/downtime)",
-    "2026-09-15T21:18:00Z terraform apply: settled provider-default field diffs from import (wait_for_rollout etc.), 0 added/5 changed/0 destroyed",
-    "2026-09-15T21:20:00Z Verified idempotency: 2nd terraform plan and 2nd terraform apply both show 'No changes' / 0 added/0 changed/0 destroyed, phase 11 terraform DONE",
-    "2026-09-15T21:25:00Z Starting phase 12 argocd"
+    "2026-09-15T21:20:00Z terraform apply idempotent (2nd run = 0 changes), phase 11 terraform DONE",
+    "2026-09-15T21:26:00Z Reused existing shared git-daemon (port 9418, base-path Z:/laragon/www/eu, --export-all) already running for sibling projects; matching-platform repo reachable at git://host.docker.internal:9418/matching-platform, verified via test clone",
+    "2026-09-15T21:28:00Z Applied argocd-application.yaml: Application matching-platform in ns argocd, source path k8s/, destination ns matching, automated sync+prune+selfHeal",
+    "2026-09-15T21:31:00Z Synced immediately (matched already-applied manifests); waited for Healthy (user-service rollout readiness window)",
+    "2026-09-15T21:33:00Z Verified: kubectl get application -n argocd shows matching-platform Synced/Healthy, all 5 pods 1/1 Running, phase 12 argocd DONE",
+    "2026-09-15T21:35:00Z All 12 phases complete, status done"
   ],
   "error": null
 }
