@@ -1,17 +1,18 @@
 {
   "project": "booking-platform",
-  "phase": "k8s_manifests",
-  "phase_index": 10,
+  "phase": "terraform",
+  "phase_index": 11,
   "total_phases": 12,
-  "percent": 83,
+  "percent": 92,
   "status": "in_progress",
-  "last_update": "2026-09-15T20:10:00Z",
+  "last_update": "2026-09-15T20:14:00Z",
   "log": [
-    "2026-09-15T20:08:00Z starting phase 9 (docker_images)",
-    "2026-09-15T20:09:00Z git repo committed, short-sha 3b65de7",
-    "2026-09-15T20:09:30Z tagged+pushed localhost:5001/inventory-service:3b65de7 and localhost:5001/payment-service:3b65de7",
-    "2026-09-15T20:09:40Z verified both present via registry /v2/<name>/tags/list, phase 9 done",
-    "2026-09-15T20:10:00Z starting phase 10 (k8s_manifests) Deployment/Service/ConfigMap/Secret for both services"
+    "2026-09-15T20:10:00Z starting phase 10 (k8s_manifests)",
+    "2026-09-15T20:11:00Z wrote k8s/infra.yaml (postgres/redis/kafka pods+services) and Deployment/Service/ConfigMap/Secret for both services",
+    "2026-09-15T20:11:30Z kubectl apply -f k8s/ -n booking succeeded with no errors",
+    "2026-09-15T20:12:00Z inventory-service crashlooped (DB not ready at startup, log.Fatal on ping) -> fixed with retry loop, rebuilt+pushed as fb431cd",
+    "2026-09-15T20:13:30Z all 5 pods (postgres, redis, kafka, inventory-service, payment-service) reached 1/1 Running, both Deployments 1/1 Available, phase 10 done",
+    "2026-09-15T20:14:00Z starting phase 11 (terraform) kubernetes provider managing only the booking namespace"
   ],
   "error": null
 }
