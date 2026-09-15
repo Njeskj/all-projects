@@ -1,0 +1,75 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: payment-service-config
+  namespace: booking
+data:
+  SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka.booking.svc.cluster.local:9092
+  INVENTORY_GRPC_HOST: inventory-service.booking.svc.cluster.local
+  INVENTORY_GRPC_PORT: "9090"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: payment-service-secret
+  namespace: booking
+type: Opaque
+stringData:
+  # ponytail: plaintext dev creds in-repo for a local kind cluster; replace
+  # with a real secret manager / sealed-secrets before any shared environment.
+  SPRING_DATASOURCE_URL: "jdbc:postgresql://postgres.booking.svc.cluster.local:5432/payment"
+  SPRING_DATASOURCE_USERNAME: postgres
+  SPRING_DATASOURCE_PASSWORD: postgres
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment-service
+  namespace: booking
+  labels:
+    app: payment-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payment-service
+  template:
+    metadata:
+      labels:
+        app: payment-service
+    spec:
+      containers:
+        - name: payment-service
+          image: localhost:5001/payment-service:3b65de7
+          ports:
+            - containerPort: 18081
+              name: http
+          envFrom:
+            - configMapRef:
+                name: payment-service-config
+            - secretRef:
+                name: payment-service-secret
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 18081
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 18081
+            initialDelaySeconds: 30
+            periodSeconds: 15
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: payment-service
+  namespace: booking
+spec:
+  selector:
+    app: payment-service
+  ports:
+    - name: http
+      port: 18081

@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
@@ -11,14 +12,25 @@ import (
 	_ "github.com/lib/pq"
 )
 
+// connectDB retries the initial ping since in k8s/compose the DB container
+// may still be starting when this process does (no initContainer / wait
+// script kept things simple — ponytail: add one if startup order needs to
+// be stricter than "retry for ~30s").
 func connectDB(dsn string) *sql.DB {
 	db, err := sql.Open("postgres", dsn)
 	if err != nil {
 		log.Fatalf("open db: %v", err)
 	}
-	if err := db.Ping(); err != nil {
-		log.Fatalf("ping db: %v", err)
+
+	var pingErr error
+	for i := 0; i < 15; i++ {
+		if pingErr = db.Ping(); pingErr == nil {
+			return db
+		}
+		log.Printf("db not ready yet (attempt %d/15): %v", i+1, pingErr)
+		time.Sleep(2 * time.Second)
 	}
+	log.Fatalf("ping db: %v", pingErr)
 	return db
 }
 

@@ -1,0 +1,120 @@
+# Minimal in-namespace infra (Postgres, Redis, Kafka) so inventory-service
+# and payment-service have something to talk to inside the cluster.
+# ponytail: single-replica, no PVC/StatefulSet, ephemeral storage — fine for
+# this dev/kind namespace; add PVCs + StatefulSets if data must survive pod restarts.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: postgres
+  namespace: booking
+  labels:
+    app: postgres
+spec:
+  containers:
+    - name: postgres
+      image: postgres:16-alpine
+      env:
+        - name: POSTGRES_PASSWORD
+          value: postgres
+        - name: POSTGRES_DB
+          value: payment
+      ports:
+        - containerPort: 5432
+      volumeMounts:
+        - name: init
+          mountPath: /docker-entrypoint-initdb.d
+  volumes:
+    - name: init
+      configMap:
+        name: postgres-init
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-init
+  namespace: booking
+data:
+  01-create-inventory-db.sql: |
+    CREATE DATABASE inventory;
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  namespace: booking
+spec:
+  selector:
+    app: postgres
+  ports:
+    - port: 5432
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: redis
+  namespace: booking
+  labels:
+    app: redis
+spec:
+  containers:
+    - name: redis
+      image: redis:7-alpine
+      ports:
+        - containerPort: 6379
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  namespace: booking
+spec:
+  selector:
+    app: redis
+  ports:
+    - port: 6379
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kafka
+  namespace: booking
+  labels:
+    app: kafka
+spec:
+  containers:
+    - name: kafka
+      image: apache/kafka:3.8.0
+      env:
+        - name: KAFKA_NODE_ID
+          value: "1"
+        - name: KAFKA_PROCESS_ROLES
+          value: broker,controller
+        - name: KAFKA_LISTENERS
+          value: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
+        - name: KAFKA_ADVERTISED_LISTENERS
+          value: PLAINTEXT://kafka.booking.svc.cluster.local:9092
+        - name: KAFKA_LISTENER_SECURITY_PROTOCOL_MAP
+          value: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+        - name: KAFKA_CONTROLLER_QUORUM_VOTERS
+          value: 1@localhost:9093
+        - name: KAFKA_CONTROLLER_LISTENER_NAMES
+          value: CONTROLLER
+        - name: KAFKA_INTER_BROKER_LISTENER_NAME
+          value: PLAINTEXT
+        - name: CLUSTER_ID
+          value: MkU3OEVBNTcwNTJENDM2Qk
+        - name: KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR
+          value: "1"
+      ports:
+        - containerPort: 9092
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka
+  namespace: booking
+spec:
+  selector:
+    app: kafka
+  ports:
+    - port: 9092
