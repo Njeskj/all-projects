@@ -1,0 +1,4 @@
+target/
+*.exe
+*.log
+opentelemetry-javaagent.jar

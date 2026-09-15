@@ -1,3 +1,0 @@
-2026/09/15 20:06:42 matching-engine HTTP listening on :8081
-2026/09/15 20:06:42 matching-engine gRPC listening on :9095
-2026/09/15 20:06:42 listen tcp :8081: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
