@@ -2,3 +2,6 @@ target/
 *.jar
 server.exe
 .mvn/wrapper/maven-wrapper.jar
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.backup
