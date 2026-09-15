@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package inventory.v1;
+
+option go_package = "inventory-service/internal/grpc/inventorypb";
+option java_package = "com.ecommerce.inventory.grpc";
+option java_multiple_files = true;
+
+service InventoryService {
+  // ReserveStock attempts to decrement available stock for a SKU by qty.
+  // Returns reserved=true if the reservation succeeded (enough stock available).
+  rpc ReserveStock (ReserveStockRequest) returns (ReserveStockResponse);
+
+  // GetStock returns current available stock for a SKU.
+  rpc GetStock (GetStockRequest) returns (GetStockResponse);
+}
+
+message ReserveStockRequest {
+  string sku = 1;
+  int32 quantity = 2;
+  string order_id = 3;
+}
+
+message ReserveStockResponse {
+  bool reserved = 1;
+  int32 remaining_stock = 2;
+  string message = 3;
+}
+
+message GetStockRequest {
+  string sku = 1;
+}
+
+message GetStockResponse {
+  string sku = 1;
+  int32 available = 2;
+}

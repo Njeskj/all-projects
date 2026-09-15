@@ -1,0 +1,4 @@
+target/
+*.jar
+server.exe
+.mvn/wrapper/maven-wrapper.jar
