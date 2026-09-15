@@ -1,0 +1,146 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.3.4)
+
+2026-09-15T20:17:18.092+01:00  INFO 14048 --- [user-service] [           main] c.m.userservice.UserServiceApplication   : Starting UserServiceApplication v0.1.0 using Java 17.0.17 with PID 14048 (Z:\laragon\www\eu\matching-platform\user-service\target\user-service.jar started by Israel in Z:\laragon\www\eu\matching-platform\user-service)
+2026-09-15T20:17:18.104+01:00  INFO 14048 --- [user-service] [           main] c.m.userservice.UserServiceApplication   : No active profile set, falling back to 1 default profile: "default"
+2026-09-15T20:17:22.284+01:00  INFO 14048 --- [user-service] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8092 (http)
+2026-09-15T20:17:22.312+01:00  INFO 14048 --- [user-service] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-09-15T20:17:22.314+01:00  INFO 14048 --- [user-service] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.30]
+2026-09-15T20:17:22.407+01:00  INFO 14048 --- [user-service] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-09-15T20:17:22.410+01:00  INFO 14048 --- [user-service] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 4154 ms
+2026-09-15T20:17:23.505+01:00  INFO 14048 --- [user-service] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-09-15T20:17:24.019+01:00  INFO 14048 --- [user-service] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@21edd891
+2026-09-15T20:17:24.024+01:00  INFO 14048 --- [user-service] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-09-15T20:17:24.110+01:00  INFO 14048 --- [user-service] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:54323/matching (PostgreSQL 16.15)
+2026-09-15T20:17:24.285+01:00  INFO 14048 --- [user-service] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 1 migration (execution time 00:00.099s)
+2026-09-15T20:17:24.342+01:00  INFO 14048 --- [user-service] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": 1
+2026-09-15T20:17:24.351+01:00  INFO 14048 --- [user-service] [           main] o.f.core.internal.command.DbMigrate      : Schema "public" is up to date. No migration necessary.
+2026-09-15T20:17:26.380+01:00  INFO 14048 --- [user-service] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoints beneath base path '/actuator'
+2026-09-15T20:17:26.652+01:00  INFO 14048 --- [user-service] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8092 (http) with context path '/'
+2026-09-15T20:17:26.757+01:00  INFO 14048 --- [user-service] [           main] o.a.k.clients.consumer.ConsumerConfig    : ConsumerConfig values: 
+	allow.auto.create.topics = true
+	auto.commit.interval.ms = 5000
+	auto.include.jmx.reporter = true
+	auto.offset.reset = earliest
+	bootstrap.servers = [localhost:54322]
+	check.crcs = true
+	client.dns.lookup = use_all_dns_ips
+	client.id = consumer-user-service-1
+	client.rack = 
+	connections.max.idle.ms = 540000
+	default.api.timeout.ms = 60000
+	enable.auto.commit = false
+	enable.metrics.push = true
+	exclude.internal.topics = true
+	fetch.max.bytes = 52428800
+	fetch.max.wait.ms = 500
+	fetch.min.bytes = 1
+	group.id = user-service
+	group.instance.id = null
+	group.protocol = classic
+	group.remote.assignor = null
+	heartbeat.interval.ms = 3000
+	interceptor.classes = []
+	internal.leave.group.on.close = true
+	internal.throw.on.fetch.stable.offset.unsupported = false
+	isolation.level = read_uncommitted
+	key.deserializer = class org.apache.kafka.common.serialization.StringDeserializer
+	max.partition.fetch.bytes = 1048576
+	max.poll.interval.ms = 300000
+	max.poll.records = 500
+	metadata.max.age.ms = 300000
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partition.assignment.strategy = [class org.apache.kafka.clients.consumer.RangeAssignor, class org.apache.kafka.clients.consumer.CooperativeStickyAssignor]
+	receive.buffer.bytes = 65536
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retry.backoff.max.ms = 1000
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = null
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	session.timeout.ms = 45000
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = null
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	value.deserializer = class org.apache.kafka.common.serialization.StringDeserializer
+
+2026-09-15T20:17:26.765+01:00  INFO 14048 --- [user-service] [nio-8092-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-09-15T20:17:26.766+01:00  INFO 14048 --- [user-service] [nio-8092-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-09-15T20:17:26.769+01:00  INFO 14048 --- [user-service] [nio-8092-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-09-15T20:17:26.916+01:00  INFO 14048 --- [user-service] [           main] o.a.k.c.t.i.KafkaMetricsCollector        : initializing Kafka metrics collector
+2026-09-15T20:17:27.327+01:00  INFO 14048 --- [user-service] [           main] o.a.kafka.common.utils.AppInfoParser     : Kafka version: 3.7.1
+2026-09-15T20:17:27.328+01:00  INFO 14048 --- [user-service] [           main] o.a.kafka.common.utils.AppInfoParser     : Kafka commitId: e2494e6ffb89f828
+2026-09-15T20:17:27.329+01:00  INFO 14048 --- [user-service] [           main] o.a.kafka.common.utils.AppInfoParser     : Kafka startTimeMs: 1789499847323
+2026-09-15T20:17:27.377+01:00  INFO 14048 --- [user-service] [           main] o.a.k.c.c.internals.LegacyKafkaConsumer  : [Consumer clientId=consumer-user-service-1, groupId=user-service] Subscribed to topic(s): match.executed
+2026-09-15T20:17:27.428+01:00  INFO 14048 --- [user-service] [           main] c.m.userservice.UserServiceApplication   : Started UserServiceApplication in 10.549 seconds (process running for 11.517)
+2026-09-15T20:17:28.147+01:00  INFO 14048 --- [user-service] [ntainer#0-0-C-1] org.apache.kafka.clients.Metadata        : [Consumer clientId=consumer-user-service-1, groupId=user-service] Cluster ID: redpanda.1ba713e1-a5d7-4064-9fa4-d50dc7aaa996
+2026-09-15T20:17:28.306+01:00  INFO 14048 --- [user-service] [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-user-service-1, groupId=user-service] Discovered group coordinator 127.0.0.1:54322 (id: 2147483647 rack: null)
+2026-09-15T20:17:28.312+01:00  INFO 14048 --- [user-service] [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-user-service-1, groupId=user-service] (Re-)joining group
+2026-09-15T20:17:28.349+01:00  INFO 14048 --- [user-service] [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-user-service-1, groupId=user-service] Request joining group due to: need to re-join with the given member-id: consumer-user-service-1-9609e044-2038-41a5-9f94-492c4666ae3c
+2026-09-15T20:17:28.351+01:00  INFO 14048 --- [user-service] [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-user-service-1, groupId=user-service] (Re-)joining group
+2026-09-15T20:17:28.357+01:00  INFO 14048 --- [user-service] [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-user-service-1, groupId=user-service] Successfully joined group with generation Generation{generationId=1, memberId='consumer-user-service-1-9609e044-2038-41a5-9f94-492c4666ae3c', protocol='range'}
+2026-09-15T20:17:28.371+01:00  INFO 14048 --- [user-service] [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-user-service-1, groupId=user-service] Finished assignment for group at generation 1: {consumer-user-service-1-9609e044-2038-41a5-9f94-492c4666ae3c=Assignment(partitions=[match.executed-0])}
+2026-09-15T20:17:28.383+01:00  INFO 14048 --- [user-service] [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-user-service-1, groupId=user-service] Successfully synced group in generation Generation{generationId=1, memberId='consumer-user-service-1-9609e044-2038-41a5-9f94-492c4666ae3c', protocol='range'}
+2026-09-15T20:17:28.385+01:00  INFO 14048 --- [user-service] [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-user-service-1, groupId=user-service] Notifying assignor about the new Assignment(partitions=[match.executed-0])
+2026-09-15T20:17:28.389+01:00  INFO 14048 --- [user-service] [ntainer#0-0-C-1] k.c.c.i.ConsumerRebalanceListenerInvoker : [Consumer clientId=consumer-user-service-1, groupId=user-service] Adding newly assigned partitions: match.executed-0
+2026-09-15T20:17:28.408+01:00  INFO 14048 --- [user-service] [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-user-service-1, groupId=user-service] Found no committed offset for partition match.executed-0
+2026-09-15T20:17:28.432+01:00  INFO 14048 --- [user-service] [ntainer#0-0-C-1] o.a.k.c.c.internals.SubscriptionState    : [Consumer clientId=consumer-user-service-1, groupId=user-service] Resetting offset for partition match.executed-0 to position FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[127.0.0.1:54322 (id: 0 rack: null)], epoch=absent}}.
+2026-09-15T20:17:28.434+01:00  INFO 14048 --- [user-service] [ntainer#0-0-C-1] o.s.k.l.KafkaMessageListenerContainer    : user-service: partitions assigned: [match.executed-0]
