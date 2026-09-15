@@ -1,18 +1,17 @@
 {
   "project": "booking-platform",
-  "phase": "terraform",
-  "phase_index": 11,
+  "phase": "argocd",
+  "phase_index": 12,
   "total_phases": 12,
-  "percent": 92,
+  "percent": 100,
   "status": "in_progress",
-  "last_update": "2026-09-15T20:14:00Z",
+  "last_update": "2026-09-15T20:20:00Z",
   "log": [
-    "2026-09-15T20:10:00Z starting phase 10 (k8s_manifests)",
-    "2026-09-15T20:11:00Z wrote k8s/infra.yaml (postgres/redis/kafka pods+services) and Deployment/Service/ConfigMap/Secret for both services",
-    "2026-09-15T20:11:30Z kubectl apply -f k8s/ -n booking succeeded with no errors",
-    "2026-09-15T20:12:00Z inventory-service crashlooped (DB not ready at startup, log.Fatal on ping) -> fixed with retry loop, rebuilt+pushed as fb431cd",
-    "2026-09-15T20:13:30Z all 5 pods (postgres, redis, kafka, inventory-service, payment-service) reached 1/1 Running, both Deployments 1/1 Available, phase 10 done",
-    "2026-09-15T20:14:00Z starting phase 11 (terraform) kubernetes provider managing only the booking namespace"
+    "2026-09-15T20:14:00Z starting phase 11 (terraform)",
+    "2026-09-15T20:15:00Z kubernetes_manifest resource hit provider bugs on stringData Secrets and dynamic Pod specs, switched to native typed resources (kubernetes_pod/deployment/service/secret/configmap)",
+    "2026-09-15T20:17:00Z deleted kubectl-applied resources, terraform apply created all 15 resources cleanly, all 5 pods Running",
+    "2026-09-15T20:18:00Z terraform apply again -> 'No changes. Your infrastructure matches the configuration.' idempotency confirmed, phase 11 done",
+    "2026-09-15T20:20:00Z starting phase 12 (argocd) Application pointing at k8s/ via local git repo source"
   ],
   "error": null
 }
