@@ -2,3 +2,6 @@ target/
 *.exe
 *.log
 opentelemetry-javaagent.jar
+terraform/.terraform/
+terraform/terraform.tfstate*
+terraform/.terraform.lock.hcl
