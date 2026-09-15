@@ -37,7 +37,7 @@ spec:
     spec:
       containers:
         - name: inventory-service
-          image: localhost:5001/inventory-service:3b65de7
+          image: localhost:5001/inventory-service:fb431cd
           ports:
             - containerPort: 8080
               name: http
