@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: "file:///Z:/laragon/www/eu/ecommerce-platform"
+    repoURL: "git://host.docker.internal:9418/ecommerce-platform"
     targetRevision: HEAD
     path: k8s
   destination:

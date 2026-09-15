@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"log"
+	"time"
 
 	"inventory-service/internal/store"
 
@@ -19,22 +20,32 @@ type OrderPlacedEvent struct {
 
 // RunConsumer blocks, consuming order.placed events and decrementing stock via st.
 // ponytail: at-least-once, no dedup/outbox — add idempotency key check if double-decrement matters.
+// ponytail: on a read error the reader is closed and recreated rather than retried in place —
+// kafka-go's group-consumer Reader can get stuck after a coordinator error (e.g. right after
+// broker restart) and never recovers on its own; a fresh Reader rejoins the group cleanly.
 func RunConsumer(ctx context.Context, brokers []string, st *store.PgStore, cache *store.Cache) {
-	r := kafka.NewReader(kafka.ReaderConfig{
-		Brokers: brokers,
-		Topic:   "order.placed",
-		GroupID: "inventory-service",
-	})
-	defer r.Close()
+	newReader := func() *kafka.Reader {
+		return kafka.NewReader(kafka.ReaderConfig{
+			Brokers: brokers,
+			Topic:   "order.placed",
+			GroupID: "inventory-service",
+		})
+	}
 
+	r := newReader()
+	defer r.Close()
 	log.Printf("kafka consumer started for topic order.placed, brokers=%v", brokers)
+
 	for {
 		m, err := r.ReadMessage(ctx)
 		if err != nil {
 			if ctx.Err() != nil {
 				return
 			}
-			log.Printf("kafka read error: %v", err)
+			log.Printf("kafka read error: %v (recreating reader)", err)
+			r.Close()
+			time.Sleep(2 * time.Second)
+			r = newReader()
 			continue
 		}
 		var evt OrderPlacedEvent
