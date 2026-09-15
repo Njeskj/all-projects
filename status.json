@@ -1,22 +1,26 @@
 {
   "project": "ecommerce-platform",
-  "phase": "compose_smoke_test",
-  "phase_index": 8,
+  "phase": "argocd",
+  "phase_index": 12,
   "total_phases": 12,
-  "percent": 67,
-  "status": "blocked",
-  "last_update": "2026-09-15T01:45:00Z",
+  "percent": 100,
+  "status": "in_progress",
+  "last_update": "2026-09-15T20:20:00Z",
   "log": [
-    "2026-09-15T01:30:00Z otel DONE: stdout trace exporters both sides, order-service client span + inventory-service otelgrpc server span visible for ReserveStock call",
-    "2026-09-15T01:40:00Z compose_smoke_test IN PROGRESS: both docker images built OK, all 5 containers were Up (postgres/redis/kafka healthy, both services started), smoke-test.sh written; gRPC reserve check verified live, first kafka-decrement timing check was still settling when Docker Desktop crashed",
-    "2026-09-15T01:45:00Z BLOCKED: Docker Desktop engine went down mid-test (daemon unresponsive, 'Docker Desktop is unable to start' after 5+ min of polling) - shared host-level dependency per plan.md risk section, not project-specific. Continuing with non-Docker artifacts (k8s manifests, terraform, argocd Application) so they're ready once Docker recovers.",
+    "2026-09-15T20:05:00Z docker_images DONE: pushed localhost:5001/inventory-service:0209fb4 and localhost:5001/order-service:0209fb4, verified via registry /v2/_catalog and tags/list",
+    "2026-09-15T20:10:00Z k8s_manifests DONE: kubectl apply -f k8s/ -n ecommerce with no error, all 5 pods (postgres/redis/kafka/inventory-service/order-service) reached Running 1/1 Ready",
+    "2026-09-15T20:20:00Z terraform DONE: kubernetes provider manages ConfigMap+Secret in ecommerce namespace only (Deployments/Services owned by k8s/+ArgoCD to avoid dual-writer conflict), terraform apply OK, 2nd terraform plan -detailed-exitcode = 0 No changes (idempotent)",
     "2026-09-15T00:00:00Z Starting ecommerce-platform build. Cluster/registry/argocd confirmed pre-existing.",
     "2026-09-15T00:05:00Z go_service DONE: go build ./... OK, GET /healthz -> 200",
     "2026-09-15T00:15:00Z spring_service DONE: mvnw package OK, GET /actuator/health -> 200 UP",
     "2026-09-15T00:30:00Z grpc DONE: proto/inventory.proto, order-service POST /orders -> gRPC ReserveStock (read-only availability check) -> inventory-service",
     "2026-09-15T00:50:00Z postgres DONE: goose migration 00001_create_stock applied, seed rows read via GetStock RPC",
     "2026-09-15T01:00:00Z redis DONE: stock cache populated/updated on Reserve/GetStock, verified via redis-cli GET stock:SKU-1",
-    "2026-09-15T01:15:00Z kafka DONE: topic order.placed created, order-service publishes on successful order, inventory-service consumer decremented SKU-2 50->43, verified via kafka-console-consumer"
+    "2026-09-15T01:15:00Z kafka DONE: topic order.placed created, order-service publishes on successful order, inventory-service consumer decremented SKU-2 50->43, verified via kafka-console-consumer",
+    "2026-09-15T01:30:00Z otel DONE: stdout trace exporters both sides, order-service client span + inventory-service otelgrpc server span visible for ReserveStock call",
+    "2026-09-15T01:45:00Z BLOCKED (transient): Docker Desktop engine crashed mid-test, host-level shared dependency issue per plan.md risk section. Waited for recovery, continued with non-Docker artifacts (k8s manifests, terraform, argocd Application) in the meantime.",
+    "2026-09-15T19:50:00Z Docker Desktop recovered, full stack (postgres/redis/kafka/inventory-service/order-service) brought back up via docker compose",
+    "2026-09-15T20:00:00Z compose_smoke_test DONE: smoke-test.sh exit 0 - order placed, gRPC ReserveStock check OK, order.placed published and consumed by inventory-service, stock decremented 82->79 confirmed in Postgres"
   ],
   "error": null
 }

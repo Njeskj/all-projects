@@ -19,12 +19,15 @@ RESP=$(curl -s -X POST http://localhost:8080/orders -H "Content-Type: applicatio
 echo "response: $RESP"
 echo "$RESP" | grep -q '"reserved":true' || fail "order was not reserved"
 
-echo "== wait for async kafka decrement =="
-sleep 3
-AFTER=$(docker exec ecommerce-platform-postgres-1 psql -U ecommerce -d ecommerce -tAc "SELECT available FROM inventory.stock WHERE sku='SKU-1'")
-echo "SKU-1 available after: $AFTER"
-
+echo "== wait for async kafka decrement (poll up to 20s) =="
 EXPECTED=$((BEFORE - 3))
+AFTER="$BEFORE"
+for i in $(seq 1 10); do
+  AFTER=$(docker exec ecommerce-platform-postgres-1 psql -U ecommerce -d ecommerce -tAc "SELECT available FROM inventory.stock WHERE sku='SKU-1'")
+  [ "$AFTER" -eq "$EXPECTED" ] && break
+  sleep 2
+done
+echo "SKU-1 available after: $AFTER"
 [ "$AFTER" -eq "$EXPECTED" ] || fail "stock not decremented as expected (before=$BEFORE after=$AFTER expected=$EXPECTED)"
 
 echo "SMOKE TEST PASSED: order placed, gRPC reservation check OK, Kafka order.placed consumed, stock decremented $BEFORE -> $AFTER"

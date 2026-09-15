@@ -6,15 +6,20 @@ import com.ecommerce.inventory.grpc.ReserveStockResponse;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.context.Scope;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 public class OrderController {
+
+    private static final Logger log = LoggerFactory.getLogger(OrderController.class);
 
     private final InventoryServiceGrpc.InventoryServiceBlockingStub inventoryStub;
     private final KafkaTemplate<String, String> kafkaTemplate;
@@ -65,8 +70,13 @@ public class OrderController {
     private void publishOrderPlaced(String orderId, String sku, int quantity) {
         try {
             String payload = objectMapper.writeValueAsString(new OrderPlacedEvent(orderId, sku, quantity));
-            kafkaTemplate.send("order.placed", orderId, payload);
+            // Block briefly so a publish failure surfaces in the response path instead of vanishing async.
+            kafkaTemplate.send("order.placed", orderId, payload).get(10, TimeUnit.SECONDS);
+            log.info("published order.placed orderId={} sku={} quantity={}", orderId, sku, quantity);
         } catch (com.fasterxml.jackson.core.JsonProcessingException e) {
+            throw new RuntimeException(e);
+        } catch (Exception e) {
+            log.error("failed to publish order.placed orderId={}", orderId, e);
             throw new RuntimeException(e);
         }
     }
