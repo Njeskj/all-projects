@@ -8,8 +8,12 @@ terraform {
 }
 
 provider "kubernetes" {
-  config_path    = "~/.kube/config"
+  config_path    = var.kubeconfig_path
   config_context = "kind-platform"
+}
+
+variable "kubeconfig_path" {
+  default = "~/.kube/config"
 }
 
 variable "namespace" {

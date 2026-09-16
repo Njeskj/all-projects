@@ -1,0 +1,77 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-api-config
+  namespace: observability
+data:
+  SPRING_REDIS_HOST: redis.observability.svc.cluster.local
+  SPRING_REDIS_PORT: "6379"
+  SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka.observability.svc.cluster.local:9092
+  METRICS_COLLECTOR_GRPC_HOST: metrics-collector.observability.svc.cluster.local
+  METRICS_COLLECTOR_GRPC_PORT: "28090"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: config-api-secret
+  namespace: observability
+type: Opaque
+stringData:
+  # ponytail: plaintext dev creds in-repo for a local kind cluster; replace
+  # with a real secret manager / sealed-secrets before any shared environment.
+  SPRING_DATASOURCE_URL: "jdbc:postgresql://postgres.observability.svc.cluster.local:5432/configapi"
+  SPRING_DATASOURCE_USERNAME: postgres
+  SPRING_DATASOURCE_PASSWORD: postgres
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: config-api
+  namespace: observability
+  labels:
+    app: config-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: config-api
+  template:
+    metadata:
+      labels:
+        app: config-api
+    spec:
+      containers:
+        - name: config-api
+          image: localhost:5001/config-api:281b9a4
+          ports:
+            - containerPort: 28080
+              name: http
+          envFrom:
+            - configMapRef:
+                name: config-api-config
+            - secretRef:
+                name: config-api-secret
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 28080
+            initialDelaySeconds: 25
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 28080
+            initialDelaySeconds: 35
+            periodSeconds: 15
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: config-api
+  namespace: observability
+spec:
+  selector:
+    app: config-api
+  ports:
+    - name: http
+      port: 28080

@@ -1,15 +1,21 @@
 {
   "project": "observability-platform",
-  "phase": "grpc",
-  "phase_index": 3,
+  "phase": "k8s_manifests",
+  "phase_index": 10,
   "total_phases": 12,
-  "percent": 25,
+  "percent": 83,
   "status": "in_progress",
-  "last_update": "2026-09-15T21:22:00Z",
+  "last_update": "2026-09-16T08:52:00Z",
   "log": [
-    "2026-09-15T00:04:00Z go_service DONE: go build ./... OK, GET /healthz -> 200 ok",
-    "2026-09-15T21:20:00Z spring_service DONE: mvnw package OK, GET /actuator/health -> 200 UP (port 28080)",
-    "2026-09-15T21:22:00Z Starting grpc phase: proto contract config-api -> metrics-collector"
+    "2026-09-15T21:22:00Z Starting grpc phase: proto contract config-api -> metrics-collector",
+    "2026-09-16T08:38:30Z grpc DONE: config-api /metrics/ingest -> metrics-collector gRPC IngestMetric verified via curl and grpcurl (proto import), fixed Jackson serialization of protobuf response by returning DTO",
+    "2026-09-16T08:40:36Z postgres DONE: flyway V1 migration applied, fixed @Table(name=dashboard_rules) mismatch, insert+read via /rules verified against psql",
+    "2026-09-16T08:41:00Z redis DONE: @Cacheable(rules) verified via redis-cli KEYS/GET, added @CacheEvict on create to fix stale-cache smoke test failure",
+    "2026-09-16T08:41:10Z kafka DONE: topic metric.ingested auto-created by kafka-init, message published by metrics-collector after gRPC call, consumed by config-api KafkaListener, verified via kafka-console-consumer.sh",
+    "2026-09-16T08:41:15Z otel DONE: LoggingSpanExporter on both services, IngestMetric-grpc-call span visible in config-api logs, IngestMetric span visible in metrics-collector logs",
+    "2026-09-16T08:47:00Z compose_smoke_test DONE: scripts/smoke_test.sh exit 0 (healthz, grpc ingest, postgres insert/read, redis cache, kafka consume) on ports 28080-28092",
+    "2026-09-16T08:48:30Z docker_images DONE: git init, short-sha 281b9a4, built+pushed localhost:5001/metrics-collector:281b9a4 and localhost:5001/config-api:281b9a4",
+    "2026-09-16T08:50:15Z k8s_manifests DONE: kubectl apply -f k8s/ -n observability, all 5 pods (postgres,redis,kafka,metrics-collector,config-api) 1/1 Running"
   ],
   "error": null
 }
