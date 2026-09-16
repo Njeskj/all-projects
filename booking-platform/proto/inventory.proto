@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package inventory;
+
+option go_package = "inventory-service/proto";
+option java_package = "com.booking.inventory.grpc";
+option java_multiple_files = true;
+
+service InventoryService {
+  rpc ReserveSlot(ReserveSlotRequest) returns (ReserveSlotResponse);
+}
+
+message ReserveSlotRequest {
+  string slot_id = 1;
+  string booking_id = 2;
+  int32 quantity = 3;
+}
+
+message ReserveSlotResponse {
+  bool success = 1;
+  string message = 2;
+}
