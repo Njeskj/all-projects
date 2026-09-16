@@ -1,0 +1,125 @@
+# ponytail: single-replica, no PVCs/no auth hardening — dev-grade in-cluster infra
+# so the app Deployments have real dependencies to reach and can go genuinely Healthy.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: matching-postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: matching-postgres
+  template:
+    metadata:
+      labels:
+        app: matching-postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:16-alpine
+          env:
+            - name: POSTGRES_PASSWORD
+              value: postgres
+            - name: POSTGRES_DB
+              value: matching
+          ports:
+            - containerPort: 5432
+          readinessProbe:
+            exec:
+              command: ["pg_isready", "-U", "postgres"]
+            initialDelaySeconds: 3
+            periodSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: matching-postgres
+spec:
+  selector:
+    app: matching-postgres
+  ports:
+    - port: 5432
+      targetPort: 5432
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: matching-redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: matching-redis
+  template:
+    metadata:
+      labels:
+        app: matching-redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:7-alpine
+          ports:
+            - containerPort: 6379
+          readinessProbe:
+            exec:
+              command: ["redis-cli", "ping"]
+            initialDelaySeconds: 3
+            periodSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: matching-redis
+spec:
+  selector:
+    app: matching-redis
+  ports:
+    - port: 6379
+      targetPort: 6379
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: matching-kafka
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: matching-kafka
+  template:
+    metadata:
+      labels:
+        app: matching-kafka
+    spec:
+      containers:
+        - name: kafka
+          image: docker.redpanda.com/redpandadata/redpanda:v24.2.7
+          args:
+            - redpanda
+            - start
+            - --smp=1
+            - --memory=512M
+            - --overprovisioned
+            - --node-id=0
+            - --kafka-addr=PLAINTEXT://0.0.0.0:9092
+            - --advertise-kafka-addr=PLAINTEXT://matching-kafka:9092
+            - --set
+            - redpanda.auto_create_topics_enabled=true
+          ports:
+            - containerPort: 9092
+          readinessProbe:
+            exec:
+              command: ["rpk", "cluster", "info", "--brokers", "localhost:9092"]
+            initialDelaySeconds: 5
+            periodSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: matching-kafka
+spec:
+  selector:
+    app: matching-kafka
+  ports:
+    - port: 9092
+      targetPort: 9092

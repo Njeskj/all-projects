@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package matching;
+
+option go_package = "matching-engine/proto;matchingpb";
+option java_package = "com.matching.grpc";
+option java_multiple_files = true;
+
+service MatchingEngine {
+  rpc SubmitOffer(SubmitOfferRequest) returns (SubmitOfferResponse);
+}
+
+message SubmitOfferRequest {
+  string offer_id = 1;
+  double price = 2;
+}
+
+message SubmitOfferResponse {
+  bool accepted = 1;
+  int32 pending_count = 2;
+}
