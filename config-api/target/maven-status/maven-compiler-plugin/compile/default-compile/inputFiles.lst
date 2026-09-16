@@ -1,9 +1,0 @@
-Z:\laragon\www\eu\observability-platform\config-api\src\main\java\com\observability\configapi\ConfigApiApplication.java
-Z:\laragon\www\eu\observability-platform\config-api\src\main\java\com\observability\configapi\GrpcClientConfig.java
-Z:\laragon\www\eu\observability-platform\config-api\src\main\java\com\observability\configapi\MetricsController.java
-Z:\laragon\www\eu\observability-platform\config-api\target\generated-sources\protobuf\grpc-java\com\observability\metricscollector\grpc\MetricsCollectorServiceGrpc.java
-Z:\laragon\www\eu\observability-platform\config-api\target\generated-sources\protobuf\java\com\observability\metricscollector\grpc\IngestMetricRequest.java
-Z:\laragon\www\eu\observability-platform\config-api\target\generated-sources\protobuf\java\com\observability\metricscollector\grpc\IngestMetricRequestOrBuilder.java
-Z:\laragon\www\eu\observability-platform\config-api\target\generated-sources\protobuf\java\com\observability\metricscollector\grpc\IngestMetricResponse.java
-Z:\laragon\www\eu\observability-platform\config-api\target\generated-sources\protobuf\java\com\observability\metricscollector\grpc\IngestMetricResponseOrBuilder.java
-Z:\laragon\www\eu\observability-platform\config-api\target\generated-sources\protobuf\java\com\observability\metricscollector\grpc\Metrics.java
