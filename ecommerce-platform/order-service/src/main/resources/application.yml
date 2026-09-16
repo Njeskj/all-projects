@@ -1,0 +1,25 @@
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
+
+spring:
+  application:
+    name: order-service
+  kafka:
+    bootstrap-servers: ${KAFKA_BROKERS:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+inventory:
+  grpc:
+    host: ${INVENTORY_GRPC_HOST:localhost}
+    port: ${INVENTORY_GRPC_PORT:9090}
